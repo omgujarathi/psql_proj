@@ -26,6 +26,24 @@ router.get('/login', (req, res) => {
     res.sendFile(__dirname + '/login.html')
 })
 
+router.post('/login', urlencodedParser, (req, res) => {
+    const query = {
+        text: 'SELECT * FROM users WHERE username = $1 AND user_password = $2',
+        values: [req.body.username, req.body.password]
+    }
+
+    client.query(query, (err, result) => {
+        if (err || result.rows[0]==null) {
+            console.log("Wrong username or password")
+            res.sendFile(__dirname + '/login.html')
+
+        } else {
+            res.sendFile(__dirname + '/user_dashboard.html')
+            console.log("Login successful.")
+        }
+    })
+})
+
 router.get('/registration', (req, res) => {
     res.sendFile(__dirname + '/registration.html')
 })
@@ -40,9 +58,9 @@ router.post('/registration', urlencodedParser, (req, res) => {
     client.query(query, (err, result) => {
         if (err) {
             console.log(err.stack)
-            alert("Error In Registration.")
+            console.log("Error In Registration.")
         } else {
-            alert("Registration Suceesful.")
+            console.log("Registration Suceesful.")
             res.sendFile(__dirname + '/login.html')
         }
     })
