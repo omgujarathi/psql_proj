@@ -1,9 +1,11 @@
 const questionImage =  (store, ques) => {
-   
-    const images = fetch(`http://localhost:3000/dashboard/${ques}`)
+   console.log("----------");
+    const images = fetch(`http://localhost:8081/api/user/dashboard/verified-questions`)
      .then((res) => res.json())
-     .then((ques) => console.log(ques))
-     .then((question) => updateStore(store, { questions }));
+     .then((ques)=> {for(let i in ques){
+        const a=`<li class="list-group-item"><a href="./answer.html?userId=${ques[i].id}">${ques[i].description}</a></li><br>`
+        document.getElementById('question-list').innerHTML = document.getElementById('question-list').innerHTML + a;
+     }})
      // return rovers;
  };
- questionImages(getQuestions);
+ questionImage('verified-questions');
