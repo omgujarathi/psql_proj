@@ -8,14 +8,15 @@ async function getAllVerifiedQuestions() {
         text: "select * from questions where is_verified = $1", values: [1]
     }
 
-    try {
-        return await databaseObject
-            .query(query)
-            .then(res => res.rows)
-    } catch (e) {
 
-        return {"error": "Error While Fetching The Questions ||" + e}
-    }
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return {status: true, questions: res.rows}
+        })
+        .catch(e => {
+            return {status: false, error: e}
+        })
 
 }
 
@@ -24,14 +25,15 @@ async function getAllQuestionByUserId(userId) {
     const query = {
         text: "select * from questions where userid =$1", values: [userId]
     }
-    try {
-        return await databaseObject
-            .query(query)
-            .then(res => res.rows)
-    } catch (e) {
-        return {"error": "Error While Fetching Users The Questions ||" + e}
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return {status: true, questions: res.rows}
+        })
+        .catch(e => {
+            return {status: false, error: e}
+        })
 
-    }
 }
 
 
@@ -42,17 +44,16 @@ async function insertQuestion(userId, description, q_ans) {
         values: [userId, description, q_ans, 0]
     }
 
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return {status: true, rowsCount: res.count}
+        })
+        .catch((e) => {
+            return {status: false, error: e}
+        })
 
-    try {
-        return await databaseObject
-            .query(query)
-            .then(res => res.rowCount === 1)
-    } catch (e) {
-        return {"error": "Error While Fetching Inserting The Question ||" + e}
-
-    }
 }
-
 
 
 async function addUser(firstname, lastname, username, password, role) {
@@ -62,14 +63,15 @@ async function addUser(firstname, lastname, username, password, role) {
         values: [firstname, lastname, username, password, role]
     }
 
-    try {
-        return await databaseObject
-            .query(query)
-            .then(res => res.rowCount === 1)
-    } catch (e) {
-        return {"error": "Error While Adding User ||" + e}
 
-    }
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return {status: true, rowsCount: res.count}
+        })
+        .catch(e => {
+            return {status: false, error: e}
+        })
 }
 
 
@@ -80,14 +82,15 @@ async function isUserExits(username) {
     }
 
 
-    try {
-        return await databaseObject
-            .query(query)
-            .then(res => res.rowCount !== 0)
-    } catch (e) {
-        return {"error": "Error While Searching For User ||" + e}
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return {status: true, isExits: res.rowCount !== 0}
+        })
+        .catch(e => {
+            return {status: false, error: e}
+        })
 
-    }
 }
 
 
