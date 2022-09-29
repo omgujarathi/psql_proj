@@ -3,6 +3,7 @@ const app = express()
 const router = express.Router()
 const bodyParser = require('body-parser')
 const { Pool, Client } = require('pg')
+const jwt = require('jsonwebtoken')
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -28,18 +29,29 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', urlencodedParser, (req, res) => {
+    console.log(req.body)
     const query = {
         text: 'SELECT * FROM users WHERE username = $1 AND user_password = $2',
         values: [req.body.username, req.body.password]
     }
-
     client.query(query, (err, result) => {
-        if (err || result.rows[0]==null) {
+        if (err || result.rows[0] == null) {
             console.log("Wrong username or password")
             res.sendFile(__dirname + '/login.html')
 
         } else {
-            res.sendFile(__dirname + '/user_dashboard.html')
+            let token
+            try {
+                token = jwt.sign(
+                    { id: result.rows[0].firstname, username: result.rows[0].username },
+                    "secretkeyappearshere",
+                    { expiresIn: "1h" })
+                res.sendFile(__dirname + '/user_dashboard.html')
+                console.log(token)
+            }
+            catch(err){
+                console.log(err)
+            }
             console.log("Login successful.")
         }
     })
