@@ -60,14 +60,14 @@ const editQuestion = async (req, res) => {
 }
 
 const updateQuestion = async (req, res) => {
-    const {userId,questionId, description, q_ans} = req.body;
-    const result = await updateQuestionByUserId(userId,questionId,description, q_ans)
+    const {userId, questionId, description, q_ans} = req.body;
+    const result = await updateQuestionByUserId(userId, questionId, description, q_ans)
     if (result.status) {
         if (result.updatedRowsCount === 0) {
             res.send({error: "Question can not be edited invalid userId " + userId})
             return
         }
-        res.send({status:"ok",updatedRowsCount:result.updatedRowsCount})
+        res.send({status: "ok", updatedRowsCount: result.updatedRowsCount})
         return
     }
     res.send({"error": "error while running query to edit the question"})

@@ -128,10 +128,10 @@ async function getUserByUserId(userId) {
 }
 
 
-async function updateQuestionByUserId(userId,questionId,description, q_ans) {
+async function updateQuestionByUserId(userId, questionId, description, q_ans) {
     const query = {
         text: "update questions set description = $1 , q_ans = $2 where userid = $3 and id= $4",
-        values: [description, q_ans, userId,questionId]
+        values: [description, q_ans, userId, questionId]
     }
 
     return await databaseObject
