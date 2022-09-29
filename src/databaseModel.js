@@ -16,7 +16,7 @@ async function getAllQuestionByUserId(userId) {
         .query("select * from questions where userid =" + userId)
         .then(res => res.rows)
         .catch(e => console.error(e))
-}
+}   
 
 
 async function insertQuestion(userId, description, q_ans) {

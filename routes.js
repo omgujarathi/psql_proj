@@ -10,18 +10,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
-const client = new Client({
-    user : "postgres",
-    host : "localhost",
-    database :"sql_playground",
-    password:'aaa',
-    port:5432
-})
-client.connect().then(() => {
-    console.log("DB Connected.")
-}).catch((err) => {
-    console.log(err)
-})
 
 router.get('', (req, res) => {
     res.sendFile(__dirname + '/frontend/login.html')
@@ -83,20 +71,20 @@ router.post('/registration', urlencodedParser, (req, res) => {
 
 })
 
-router.get('/user_dashboard', (req, res) => {
-    res.sendFile(__dirname + '/frontend/user_dashboard.html')
-})
+// router.get('/user_dashboard', (req, res) => {
+//     res.sendFile(__dirname + '/frontend/user_dashboard.html')
+// })
 
-router.get('/questions', (req, res) => {
-    res.sendFile(__dirname + '/frontend/questions.html')
-})
+// router.get('/questions', (req, res) => {
+//     res.sendFile(__dirname + '/frontend/questions.html')
+// })
 
-router.get('/addquestions', (req, res) => {
-    res.sendFile(__dirname + '/frontend/add_questions.html')
-})
+// router.get('/addquestions', (req, res) => {
+//     res.sendFile(__dirname + '/frontend/add_questions.html')
+// })
 
-router.get('/answer', (req, res) => {
-    res.sendFile(__dirname + '/frontend/answer.html')
-})
+// router.get('/answer', (req, res) => {
+//     res.sendFile(__dirname + '/frontend/answer.html')
+// })
 
 module.exports = router
