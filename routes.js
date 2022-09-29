@@ -4,6 +4,8 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 const { Pool, Client } = require('pg')
 const jwt = require('jsonwebtoken')
+// const session = require('express-session')
+
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -14,14 +16,21 @@ const client = new Client({
     password: 'aaa',
     port: '5432'
 })
+
 client.connect().then(() => {
     console.log("DB Connected.")
 }).catch((err) => {
     console.log(err)
 })
 
+var session
 router.get('', (req, res) => {
-    res.sendFile(__dirname + '/login.html')
+    
+    req.session.id ? res.redirect('/user_dashboard') : res.redirect('/login')
+    
+    console.log(session.uid)
+    console.log(session.username)
+
 })
 
 router.get('/login', (req, res) => {
@@ -29,9 +38,8 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', urlencodedParser, (req, res) => {
-    console.log(req.body)
     const query = {
-        text: 'SELECT * FROM users WHERE username = $1 AND user_password = $2',
+        text: 'SELECT * FROM users WHERE username = $1 AND password = $2',
         values: [req.body.username, req.body.password]
     }
     client.query(query, (err, result) => {
@@ -46,10 +54,13 @@ router.post('/login', urlencodedParser, (req, res) => {
                     { id: result.rows[0].firstname, username: result.rows[0].username },
                     "secretkeyappearshere",
                     { expiresIn: "1h" })
-                res.sendFile(__dirname + '/user_dashboard.html')
-                console.log(token)
-            }
-            catch(err){
+
+                session = req.session;
+                session.uid = result.rows[0].id
+                session.username = result.rows[0].username
+                res.redirect('/user_dashboard')
+            }   
+            catch (err) {
                 console.log(err)
             }
             console.log("Login successful.")
@@ -64,7 +75,7 @@ router.get('/registration', (req, res) => {
 router.post('/registration', urlencodedParser, (req, res) => {
 
     const query = {
-        text: 'INSERT INTO users(firstname, lastname, username, user_password, score, user_role) VALUES($1, $2, $3, $4, $5, $6)',
+        text: 'INSERT INTO users(firstname, lastname, username, password, score, role) VALUES($1, $2, $3, $4, $5, $6)',
         values: [req.body.firstname, req.body.lastname, req.body.username, req.body.password, '0', 'player'],
     }
 
@@ -94,6 +105,11 @@ router.get('/addquestions', (req, res) => {
 
 router.get('/answer', (req, res) => {
     res.sendFile(__dirname + '/answer.html')
+})
+
+router.get('/logout',(req,res)=>{
+    req.session.destroy();
+    res.redirect('/login')
 })
 
 module.exports = router

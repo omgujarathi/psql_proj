@@ -1,25 +1,21 @@
 var express = require('express')
 var router = require('./routes')
-// const { Pool, Client } = require('pg')
+const sessions = require('express-session')
+const cookieParer = require('cookie-parser')
 
 app = express()
+
+const oneDay = 1000 * 60 * 60 * 24;
+
+app.use(sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized: true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
+app.use(cookieParer())
 app.use('', router)
-
-// const client = new Client({
-//     user: 'mayurkidi',
-//     host: 'localhost',
-//     database: 'sql_playground',
-//     password: '01001000',
-// })
-
-// client.connect().then(() => {
-//     console.log("DB Connected")
-// }).catch((err) => {
-//     console.log(err)
-// })
 
 app.listen(3000, () => {
     console.log("server started")
 })
-
-// module.exports = client
