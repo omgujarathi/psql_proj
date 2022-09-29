@@ -1,10 +1,9 @@
 const express = require("express")
 const {userDashboardRouter} = require("./src/userDashboardRouter")
 const {userAddQuestionRouter} = require("./src/userAddQuestionRouter")
-var router = require('./routes')
+const router = require('./routes')
 
 // const {registrationRouter}=require("./src/registrationRouter.js")
-const path = require("path");
 const app = express()
 const port = 8081;
 
@@ -12,6 +11,8 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
+
+console.log("were are you")
 
 
 // app.use(express.static(path.join(__dirname + "/frontend")))

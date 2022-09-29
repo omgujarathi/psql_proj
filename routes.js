@@ -2,10 +2,10 @@ const express = require('express')
 const app = express()
 const router = express.Router()
 const bodyParser = require('body-parser')
-const { Pool, Client } = require('pg')
+const {  Client } = require('pg')
 const jwt = require('jsonwebtoken')
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
@@ -76,7 +76,8 @@ router.post('/registration', urlencodedParser, (req, res) => {
             console.log(err.stack)
             console.log("Error In Registration.")
         } else {
-            console.log("Registration Suceesful.")
+
+            console.log("Registration Successful.")
             res.sendFile(__dirname + '/frontend/login.html')
         }
     })
@@ -91,7 +92,7 @@ router.get('/questions', (req, res) => {
     res.sendFile(__dirname + '/frontend/questions.html')
 })
 
-router.get('/addquestions', (req, res) => {
+router.get('/add-questions', (req, res) => {
     res.sendFile(__dirname + '/frontend/add_questions.html')
 })
 
