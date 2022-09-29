@@ -1,14 +1,5 @@
-const{Pool,Client} = require('pg')
+const{Client} = require('pg')
 
-const poolDatabaseConfig = {
-    user : "postgres",
-    host : "localhost",
-    database :"sql_playground",
-    password:'aaa',
-    port:5432
-}
-
-const pool = new Pool(poolDatabaseConfig)
 
 const clientDatabaseConfig = {
     user: 'postgres',

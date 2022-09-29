@@ -1,45 +1,111 @@
-const {databaseObject} = require("./databaseConnection.js")
-
+const { databaseObject } = require("./databaseConnection.js")
+const md5 = require('md5')
 
 async function getAllVerifiedQuestions() {
 
+
+    const query = {
+        text: "select * from questions where is_verified = $1", values: [1]
+    }
+
+
     return await databaseObject
-        .query("select * from questions where is_verified = 1")
-        .then(res => res.rows)
-        .catch(e => console.error((e)))
+        .query(query)
+        .then(res => {
+            return { status: true, questions: res.rows }
+        })
+        .catch(e => {
+            return { status: false, error: e }
+        })
 
 }
 
 
 async function getAllQuestionByUserId(userId) {
+    const query = {
+        text: "select * from questions where userid =$1", values: [userId]
+    }
     return await databaseObject
-        .query("select * from questions where userid =" + userId)
-        .then(res => res.rows)
-        .catch(e => console.error(e))
-}   
+        .query(query)
+        .then(res => {
+            return { status: true, questions: res.rows }
+        })
+        .catch(e => {
+            return { status: false, error: e }
+        })
+
+}
 
 
 async function insertQuestion(userId, description, q_ans) {
+
+    const query = {
+        text: "insert into questions(userid, description, q_ans, is_verified) values ($1, $2, $3, $4)",
+        values: [userId, description, q_ans, 0]
+    }
+
     return await databaseObject
-        .query(`insert into questions(userid, description, q_ans, is_verified)
-                values (${userId}, '${description}', '${q_ans}', 0)`)
-        .then(res => res.rowCount == 1 ? true : false)
-        .catch(e => console.log(e))
+        .query(query)
+        .then(res => {
+            return { status: true, rowsCount: res.count }
+        })
+        .catch((e) => {
+            return { status: false, error: e }
+        })
+
 }
 
 
-async function addUser(firstname,lastname,username,password,role){
+async function addUser(firstname, lastname, username, password, role) {
+
+    const query = {
+        text: "INSERT INTO users(firstname, lastname, username, password, score, role)  VALUES ($1, $2, $3, $4, $5, $6)",
+        values: [firstname, lastname, username, md5(password), 0, role]
+    }
+
     return await databaseObject
-        .query(`INSERT INTO users(firstname,lastname,username,password,score, role) VALUES ('${firstname}','${lastname}','${username}','${password}',0,'${role}');`)
-        .then(res=>res.rowCount ==1 ? true:false)
-        .catch(e =>console.log(e))
+        .query(query)
+        .then(res => {
+            return { status: true, rowsCount: res.count }
+        })
+        .catch(e => {
+            return { status: false, error: e }
+        })
 }
 
-async function isUserExits(username){
-    return await  databaseObject
-        .query(`select * from users where username = '${username}';`)
-        .then(res=> res.rowCount!==0?true:false)
-        .catch(e=> console.log(e))
+
+async function isUserExits(username) {
+
+    const query = {
+        text: "select * from users  where username = $1", values: [username]
+    }
+
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return { status: true, isExits: res.rowCount !== 0 }
+        })
+        .catch(e => {
+            return { status: false, error: e }
+        })
+
+}
+
+async function verifyUser(username, password) {
+    const query = {
+        text: "select * from users  where username = $1 and password = $2", values: [username, md5(password)]
+    }
+
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return { status: true, result: res.rows[0] }
+        })
+        .catch(e => {
+            return { status: false, error: e }
+        })
+
+
 }
 
 
@@ -47,7 +113,8 @@ module.exports = {
     getAllVerifiedQuestions: getAllVerifiedQuestions,
     getAllQuestionByUserId: getAllQuestionByUserId,
     insertQuestion: insertQuestion,
-    addUser:addUser,
-    isUserExits:isUserExits,
+    addUser: addUser,
+    isUserExits: isUserExits,
+    verifyUser:verifyUser,
 
 }

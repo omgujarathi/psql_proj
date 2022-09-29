@@ -7,7 +7,15 @@ const userAddQuestionRouter = async (req, res) => {
 
     const {userId, description, q_ans} = req.body
 
-    res.send(await insertQuestion(userId, description, q_ans))
+    const result =await insertQuestion(userId, description, q_ans)
+    if(result.status){
+        res.send({status:"ok",userId:userId,description:description,q_ans:q_ans})
+        return
+
+    }
+
+    console.log(result.error)
+    res.send({status:"error",error:result.error})
 
 }
 
