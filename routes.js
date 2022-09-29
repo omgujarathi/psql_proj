@@ -10,11 +10,11 @@ const jwt = require('jsonwebtoken')
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'sql_playground',
-    password: 'aaa',
-    port: '5432'
+    user : "postgres",
+    host : "localhost",
+    database :"sql_playground",
+    password:'aaa',
+    port:5432
 })
 
 client.connect().then(() => {
