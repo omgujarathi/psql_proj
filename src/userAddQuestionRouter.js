@@ -3,7 +3,7 @@ const {insertQuestion} = require("./databaseModel.js")
 const router = express.Router()
 
 
-const addQuestion = async (req, res) => {
+const userAddQuestionRouter = async (req, res) => {
 
     const {userId, description, q_ans} = req.body
 
@@ -11,8 +11,8 @@ const addQuestion = async (req, res) => {
 
 }
 
-router.post("/addQuestion", addQuestion)
+router.post("/question", userAddQuestionRouter)
 
 module.exports = {
-    addQuestionRouter: router
+    userAddQuestionRouter: router
 }

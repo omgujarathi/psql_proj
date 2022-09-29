@@ -28,9 +28,26 @@ async function insertQuestion(userId, description, q_ans) {
 }
 
 
+async function addUser(firstname,lastname,username,password,role){
+    return await databaseObject
+        .query(`INSERT INTO users(firstname,lastname,username,password,score, role) VALUES ('${firstname}','${lastname}','${username}','${password}',0,'${role}');`)
+        .then(res=>res.rowCount ==1 ? true:false)
+        .catch(e =>console.log(e))
+}
+
+async function isUserExits(username){
+    return await  databaseObject
+        .query(`select * from users where username = '${username}';`)
+        .then(res=> res.rowCount!==0?true:false)
+        .catch(e=> console.log(e))
+}
+
+
 module.exports = {
     getAllVerifiedQuestions: getAllVerifiedQuestions,
     getAllQuestionByUserId: getAllQuestionByUserId,
-    insertQuestion:insertQuestion
+    insertQuestion: insertQuestion,
+    addUser:addUser,
+    isUserExits:isUserExits,
 
 }
