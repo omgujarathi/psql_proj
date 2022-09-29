@@ -14,7 +14,7 @@ app.use(express.urlencoded({
 }))
 
 
-app.use(express.static(path.join(__dirname + "/frontend")))
+// app.use(express.static(path.join(__dirname + "/frontend")))
 
 app.use("/api/user/dashboard", userDashboardRouter);
 app.use("/api/user/add-question", userAddQuestionRouter);

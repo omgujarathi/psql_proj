@@ -7,6 +7,9 @@ const jwt = require('jsonwebtoken')
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+app.use(express.json())
+app.use(express.urlencoded({extended:false}))
+
 const client = new Client({
     user : "postgres",
     host : "localhost",
@@ -21,23 +24,23 @@ client.connect().then(() => {
 })
 
 router.get('', (req, res) => {
-    res.sendFile(__dirname + '/login.html')
+    res.sendFile(__dirname + '/frontend/login.html')
 })
 
 router.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/login.html')
+    res.sendFile(__dirname + '/frontend/login.html')
 })
 
-router.post('/login', urlencodedParser, (req, res) => {
-    console.log(req.body)
+router.post('/login',  urlencodedParser,(req, res) => {
+    console.log("body pram",req.body)
     const query = {
-        text: 'SELECT * FROM users WHERE username = $1 AND user_password = $2',
+        text: 'SELECT * FROM users WHERE username = $1 AND password = $2',
         values: [req.body.username, req.body.password]
     }
     client.query(query, (err, result) => {
         if (err || result.rows[0] == null) {
             console.log("Wrong username or password")
-            res.sendFile(__dirname + '/login.html')
+            res.sendFile(__dirname + '/frontend/login.html')
 
         } else {
             let token
@@ -46,7 +49,7 @@ router.post('/login', urlencodedParser, (req, res) => {
                     { id: result.rows[0].firstname, username: result.rows[0].username },
                     "secretkeyappearshere",
                     { expiresIn: "1h" })
-                res.sendFile(__dirname + '/user_dashboard.html')
+                res.sendFile(__dirname + '/frontend/user_dashboard.html')
                 console.log(token)
             }
             catch(err){
@@ -58,14 +61,14 @@ router.post('/login', urlencodedParser, (req, res) => {
 })
 
 router.get('/registration', (req, res) => {
-    res.sendFile(__dirname + '/registration.html')
+    res.sendFile(__dirname + '/frontend/registration.html')
 })
 
 router.post('/registration', urlencodedParser, (req, res) => {
 
     const query = {
-        text: 'INSERT INTO users(firstname, lastname, username, user_password, score, user_role) VALUES($1, $2, $3, $4, $5, $6)',
-        values: [req.body.firstname, req.body.lastname, req.body.username, req.body.password, '0', 'player'],
+        text: 'INSERT INTO users(firstname, lastname, username, password, score, role) VALUES($1, $2, $3, $4, $5, $6)',
+        values: [req.body.firstname, req.body.lastname, req.body.username, req.body.password, '0', 'user'],
     }
 
     client.query(query, (err, result) => {
@@ -74,26 +77,26 @@ router.post('/registration', urlencodedParser, (req, res) => {
             console.log("Error In Registration.")
         } else {
             console.log("Registration Suceesful.")
-            res.sendFile(__dirname + '/login.html')
+            res.sendFile(__dirname + '/frontend/login.html')
         }
     })
 
 })
 
 router.get('/user_dashboard', (req, res) => {
-    res.sendFile(__dirname + '/user_dashboard.html')
+    res.sendFile(__dirname + '/frontend/user_dashboard.html')
 })
 
 router.get('/questions', (req, res) => {
-    res.sendFile(__dirname + '/questions.html')
+    res.sendFile(__dirname + '/frontend/questions.html')
 })
 
 router.get('/addquestions', (req, res) => {
-    res.sendFile(__dirname + '/add_questions.html')
+    res.sendFile(__dirname + '/frontend/add_questions.html')
 })
 
 router.get('/answer', (req, res) => {
-    res.sendFile(__dirname + '/answer.html')
+    res.sendFile(__dirname + '/frontend/answer.html')
 })
 
 module.exports = router
