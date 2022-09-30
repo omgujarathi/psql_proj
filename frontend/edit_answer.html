@@ -19,32 +19,31 @@
     <div class="header text-primary">
       <h1>Answer</h1>
     </div>
-    <form>
-        <div class="form-group">
+    <form onsubmit="return false">
+        <div class="form-group" >
           <label for="question">Question</label>
-          <textarea type="email" class="form-control" id="question" aria-describedby="emailHelp" readonly></textarea>
+          <textarea type="email" class="form-control" id="question" aria-describedby="emailHelp" ></textarea>
         </div>
         <div class="form-group">
           <label for="description">Description</label>
-          <textarea type="email" class="form-control" id="description" aria-describedby="emailHelp" readonly></textarea>
+          <textarea type="email" class="form-control" id="description" aria-describedby="emailHelp"></textarea>
         </div>
         <div class="form-group">
         <img src="" alt="Database image">
     </div>
         <div class="form-group">
-          <label for="answer">Write Your Query</label>
-          <textarea type="password" class="form-control" id="answer" ></textarea>
-        </div>
-        <button onCLick="submitQues()" type="submit" class="btn btn-primary">Submit</button>
+            <label for="Qanswer">answer</label>
+            <textarea type="email" class="form-control" id="Qanswer" ></textarea>
+          </div>
+        <button onCLick="UpdateQues()"  class="btn btn-primary">Update</button>
+        <br><br>
+      <div id="result" ></div>
       </form>
     </div>
-    <br>
-      <button onclick="answerFunction()" hidden>show answer</button>
-      <br><br>
-      <div id="Qanswer" style="display:none">a</div>
+    
   </body>
   <script>
-    async function submitQues(){
+    async function UpdateQues(){
         const i=window.location.href.slice(window.location.href.indexOf('=') + 1).split('&')
         // console.log(i[0]);    
         // console.log(document.getElementById("question").value);
@@ -81,13 +80,10 @@
             // Sending data with the request
             xhr.send(data);
     }
-
-
-
-
+    
     async function myfuntion(){
-      const i=window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
-      console.log(i[0]);
+      const i=window.location.href.slice(window.location.href.indexOf('=') + 1).split('&')
+     // console.log(i[0]);
       const images = await fetch(`http://localhost:8081/api/user/dashboard/question/${i}`)
       .then((res) => res.json())
       // .then((ques)=>console.log(ques));
@@ -97,19 +93,7 @@
         document.getElementById("Qanswer").innerHTML=ques[0].q_ans;
         
       })
-
-      // .then((ques)=> {for(let i in ques){
-      //    const a=`<li class="list-group-item"><a href="./answer.html?userId=${ques[i].id}">${ques[i].description}</a></li><br>`
-      //    document.getElementById('question-list').innerHTML = document.getElementById('question-list').innerHTML + a;
-      // }})
     }
-    function answerFunction(){
-      var x = document.getElementById("Qanswer");
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-  }
-    }
+    
   </script>
 </html>

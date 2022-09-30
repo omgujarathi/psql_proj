@@ -65,6 +65,7 @@ async function questionInfo(questionId) {
     return await databaseObject
         .query(query)
         .then(res => {
+            console.log(res);
             return {status: true, data: res.rows}
         })
         .catch(e => {

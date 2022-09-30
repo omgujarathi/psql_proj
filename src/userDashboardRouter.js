@@ -35,6 +35,7 @@ const myQuestions = async (req, res) => {
 
 const question = async (req, res) => {
     const {questionId} = req.params
+    console.log(questionId);
     const result = await questionInfo(questionId)
     if (result.status) {
         res.send(result.data)
@@ -73,12 +74,26 @@ const updateQuestion = async (req, res) => {
     res.send({"error": "error while running query to edit the question"})
 
 }
+const submitAnswer = async (req, res) => {
+    const {userId, questionId, description, q_ans} = req.body;
+    const result = await updateQuestionByUserId(userId, questionId, description, q_ans)
+    if (result.status) {
+        if (result.updatedRowsCount === 0) {
+            res.send({error: "Question can not be edited invalid userId " + userId})
+            return
+        }
+        res.send({status: "ok", updatedRowsCount: result.updatedRowsCount})
+        return
+    }
+    res.send({"error": "error while running query to edit the question"})
 
+}
 
 router.get("/verified-questions", questions)
 router.get("/my-questions", myQuestions)
 router.get("/question/:questionId", question)
 router.get("/edit-question/:questionId", editQuestion)
 router.put("/edit-question", updateQuestion)
+router.put("/submit-answe", submitAnswer)
 
 module.exports = {userDashboardRouter: router}
