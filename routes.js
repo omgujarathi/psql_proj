@@ -8,7 +8,6 @@ const jwt = require('jsonwebtoken')
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use(express.json())
-app.use(express.urlencoded({extended:false}))
 
 const client = new Client({
     user : "postgres",
