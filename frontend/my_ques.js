@@ -1,6 +1,6 @@
 const questionImage =  (store, ques) => {
     console.log("----------");
-     const images = fetch(`http://localhost:8081/api/user/dashboard/my-questions?userId=${5}`)
+     const images = fetch(`/api/user/dashboard/my-questions?userId=${4}`)
       .then((res) => res.json())
      // .then((ques)=>console.log(ques));
       .then((ques)=> {for(let i in ques){

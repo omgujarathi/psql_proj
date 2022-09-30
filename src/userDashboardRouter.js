@@ -1,7 +1,7 @@
 const express = require("express")
 let router = express.Router();
 const {
-    getAllVerifiedQuestions, getAllQuestionByUserId, questionInfo, updateQuestionByUserId
+    getAllVerifiedQuestions, getAllQuestionByUserId, questionInfo, updateQuestionByUserId,SubmitAnswerByUserId,answerbyUserId,
 } = require("./databaseModel.js")
 
 
@@ -32,7 +32,7 @@ const myQuestions = async (req, res) => {
 
 const question = async (req, res) => {
     const {questionId} = req.params
-    console.log(questionId);
+    //console.log(questionId);
     const result = await questionInfo(questionId)
     if (result.status) {
         res.send(result.data)
@@ -72,11 +72,11 @@ const updateQuestion = async (req, res) => {
 
 }
 const submitAnswer = async (req, res) => {
-    const {userId, questionId, description, q_ans} = req.body;
-    const result = await updateQuestionByUserId(userId, questionId, description, q_ans)
+    const {userId, questionId, description} = req.body;
+    const result = await SubmitAnswerByUserId(userId, questionId, description)
     if (result.status) {
         if (result.updatedRowsCount === 0) {
-            res.send({error: "Question can not be edited invalid userId " + userId})
+            res.send({error: "answer can not be edited invalid userId " + userId})
             return
         }
         res.send({status: "ok", updatedRowsCount: result.updatedRowsCount})
@@ -85,12 +85,31 @@ const submitAnswer = async (req, res) => {
     res.send({"error": "error while running query to edit the question"})
 
 }
+const answer = async (req, res) => {
+    
+    const a=req.params.qid.toString().split('+');
+    const qId=a[0];
+    const uId=a[1];
+    // console.log(a[0]);
+    // console.log("aaaaaaaaaaaaaaa")
+    console.log(qId,uId);
+
+    const result = await answerbyUserId(qId,uId)
+    if (result.status) {
+        res.send(result.data)
+        return
+    }
+    res.send({"error": "error while running query to fetch answer"})
+
+    
+}
 
 router.get("/verified-questions", questions)
 router.get("/my-questions", myQuestions)
 router.get("/question/:questionId", question)
 router.get("/edit-question/:questionId", editQuestion)
 router.put("/edit-question", updateQuestion)
-router.put("/submit-answe", submitAnswer)
+router.post("/submit-answer", submitAnswer)
+router.get("/answer/:qid", answer);
 
 module.exports = {userDashboardRouter: router}

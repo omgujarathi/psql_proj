@@ -44,7 +44,7 @@
   </body>
   <script>
     async function UpdateQues(){
-        const i=window.location.href.slice(window.location.href.indexOf('=') + 1).split('&')
+        const i=window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
         // console.log(i[0]);    
         // console.log(document.getElementById("question").value);
             let question = document.getElementById("question").value
@@ -75,16 +75,16 @@
             };
  
             // Converting JSON data to string
-            var data = JSON.stringify({"userId":5,"questionId":i[0], "description": question, "q_ans": answer});
+            var data = JSON.stringify({"userId":4,"questionId":i[0], "description": question, "q_ans": answer});
  
             // Sending data with the request
             xhr.send(data);
     }
     
     async function myfuntion(){
-      const i=window.location.href.slice(window.location.href.indexOf('=') + 1).split('&')
+      const i=window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
      // console.log(i[0]);
-      const images = await fetch(`http://localhost:8081/api/user/dashboard/question/${i}`)
+      const images = await fetch(`/api/user/dashboard/question/${i}`)
       .then((res) => res.json())
       // .then((ques)=>console.log(ques));
       .then((ques)=>{

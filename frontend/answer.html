@@ -13,13 +13,13 @@
       crossorigin="anonymous"
     />
   </head>
-  <body class="m-2" onload="myfuntion()">
+  <body class="m-2" onload="myfuntion()" onload="myfunction1()">
     
     <div>
     <div class="header text-primary">
       <h1>Answer</h1>
     </div>
-    <form>
+    <form onsubmit="return false">
         <div class="form-group">
           <label for="question">Question</label>
           <textarea type="email" class="form-control" id="question" aria-describedby="emailHelp" readonly></textarea>
@@ -36,6 +36,8 @@
           <textarea type="password" class="form-control" id="answer" ></textarea>
         </div>
         <button onCLick="submitQues()" type="submit" class="btn btn-primary">Submit</button>
+        <br><br>
+      <div id="result" ></div>
       </form>
     </div>
     <br>
@@ -45,18 +47,17 @@
   </body>
   <script>
     async function submitQues(){
-        const i=window.location.href.slice(window.location.href.indexOf('=') + 1).split('&')
+        const i=window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
         // console.log(i[0]);    
         // console.log(document.getElementById("question").value);
-            let question = document.getElementById("question").value
-            let answer = document.getElementById("Qanswer").value
+            let answer = document.getElementById("answer").value
               
             // Creating a XHR object
             let xhr = new XMLHttpRequest();
-            let url = "/api/user/dashboard/edit-question/";
+            let url = "/api/user/dashboard/submit-answer";
        
             // open a connection
-            xhr.open("PUT", url, true);
+            xhr.open("POST", url, true);
  
             // Set the request header i.e. which type of content you are sending
             xhr.setRequestHeader("Content-Type", "application/json");
@@ -66,29 +67,28 @@
                 if (xhr.readyState === 4 && xhr.status === 200) {
  
                     // Print received data from server
+                    console.log(this.responseText);
                     if(this.responseText[11]!="o"){
                     result.innerHTML = this.responseText;}
                     else{
-                        result.innerHTML="question updated"
+                        result.innerHTML="answer submited"
                     }
  
                 }
             };
  
             // Converting JSON data to string
-            var data = JSON.stringify({"userId":5,"questionId":i[0], "description": question, "q_ans": answer});
+            var data = JSON.stringify({"userId":4,"questionId":i[0], "description": answer});
  
             // Sending data with the request
             xhr.send(data);
     }
-
-
-
+    
 
     async function myfuntion(){
       const i=window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
-      console.log(i[0]);
-      const images = await fetch(`http://localhost:8081/api/user/dashboard/question/${i}`)
+     console.log(i[0]);
+      const images = await fetch(`/api/user/dashboard/question/${i}`)
       .then((res) => res.json())
       // .then((ques)=>console.log(ques));
       .then((ques)=>{
@@ -97,6 +97,11 @@
         document.getElementById("Qanswer").innerHTML=ques[0].q_ans;
         
       })
+
+
+      const images1 = await fetch(`/api/user/dashboard/answer/${i}+4`)
+      .then((res)=>res.json())
+      .then((ques)=>{document.getElementById("answer").innerHTML=ques[0].description;});
 
       // .then((ques)=> {for(let i in ques){
       //    const a=`<li class="list-group-item"><a href="./answer.html?userId=${ques[i].id}">${ques[i].description}</a></li><br>`

@@ -148,7 +148,41 @@ async function updateQuestionByUserId(userId, questionId, description, q_ans) {
 
 
 }
+async function SubmitAnswerByUserId(userId, questionId, description) {
 
+    const query = {
+        text: "insert into answers(userid,q_id,description,correct) VALUES ($1,$2,$3,$4)",
+        values: [userId, questionId, description, 0,]
+    }
+    return await databaseObject
+    .query(query)
+    .then(res => {
+        return {status: true, rowsCount: res.rowCount}
+    })
+    .catch(e => {
+        return {status: false, error: e}
+    })
+
+
+}
+
+async function answerbyUserId(qId,uId) {
+    const query = {
+        text: "select * from answers where userid = $1 and q_id= $2 order by id desc", values: [uId,qId]
+    }
+
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return {status: true, data: res.rows}
+        })
+        .catch(e => {
+            return {status: false, error: e}
+        })
+
+
+       
+}
 
 module.exports = {
     getAllVerifiedQuestions: getAllVerifiedQuestions,
@@ -159,5 +193,8 @@ module.exports = {
     questionInfo: questionInfo,
     getUserByUserId: getUserByUserId,
     updateQuestionByUserId: updateQuestionByUserId,
+    SubmitAnswerByUserId: SubmitAnswerByUserId,
+    answerbyUserId:answerbyUserId,
+
 
 }
