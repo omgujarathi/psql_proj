@@ -13,7 +13,9 @@
       crossorigin="anonymous"
     />
   </head>
-  <body class="m-2">
+  <body class="m-2" onload="myfuntion()">
+    
+    <div>
     <div class="header text-primary">
       <h1>Answer</h1>
     </div>
@@ -24,7 +26,7 @@
         </div>
         <div class="form-group">
           <label for="description">Description</label>
-          <textarea type="email" class="form-control" id="description" aria-describedby="emailHelp"></textarea>
+          <textarea type="email" class="form-control" id="description" aria-describedby="emailHelp" readonly></textarea>
         </div>
         <div class="form-group">
         <img src="" alt="Database image">
@@ -35,5 +37,31 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+    </div>
+    <br>
+      <button onclick="answerFunction()">show answer</button>
+      <br><br>
+      <div id="Qanswer" style="display:none">a</div>
   </body>
+  <script>
+    function myfuntion(){
+      const i=window.location.href.slice(window.location.href.indexOf('=') + 1).split('&')
+      console.log(i[0]);
+      const images = fetch(`http://localhost:8081/api/user/dashboard/question/${i}`)
+      .then((res) => res.json())
+      .then((ques)=>console.log(ques));
+      // .then((ques)=> {for(let i in ques){
+      //    const a=`<li class="list-group-item"><a href="./answer.html?userId=${ques[i].id}">${ques[i].description}</a></li><br>`
+      //    document.getElementById('question-list').innerHTML = document.getElementById('question-list').innerHTML + a;
+      // }})
+    }
+    function answerFunction(){
+      var x = document.getElementById("Qanswer");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+  }
+    }
+  </script>
 </html>
