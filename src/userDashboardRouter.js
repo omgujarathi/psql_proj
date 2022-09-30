@@ -3,6 +3,7 @@ let router = express.Router();
 const {
     getAllVerifiedQuestions, getAllQuestionByUserId, questionInfo, updateQuestionByUserId,SubmitAnswerByUserId,answerbyUserId,
 } = require("./databaseModel.js")
+const {verifyToken} = require("../middleware/auth.js")
 
 
 const questions = async (req, res) => {

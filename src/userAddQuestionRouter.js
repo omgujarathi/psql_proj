@@ -1,6 +1,7 @@
 const express = require("express");
 const {insertQuestion} = require("./databaseModel.js")
 const router = express.Router()
+const {verifyToken} = require("../middleware/auth.js")
 
 
 const userAddQuestionRouter = async (req, res) => {
@@ -19,7 +20,7 @@ const userAddQuestionRouter = async (req, res) => {
 
 }
 
-router.post("/question", userAddQuestionRouter)
+router.post("/question", verifyToken, userAddQuestionRouter)
 
 module.exports = {
     userAddQuestionRouter: router
