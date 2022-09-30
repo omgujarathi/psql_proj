@@ -83,6 +83,7 @@ async function addUser(firstname, lastname, username, password, role) {
     }
 
 
+
     return await databaseObject
         .query(query)
         .then(res => {
