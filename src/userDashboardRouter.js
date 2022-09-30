@@ -1,10 +1,7 @@
 const express = require("express")
 let router = express.Router();
 const {
-    getAllVerifiedQuestions,
-    getAllQuestionByUserId,
-    questionInfo,
-    updateQuestionByUserId
+    getAllVerifiedQuestions, getAllQuestionByUserId, questionInfo, updateQuestionByUserId
 } = require("./databaseModel.js")
 
 

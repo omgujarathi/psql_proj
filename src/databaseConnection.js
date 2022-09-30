@@ -1,18 +1,18 @@
-const{Client} = require('pg')
+const {Client} = require('pg')
+const env = require("dotenv")
+env.config()
 
 
-const clientDatabaseConfig = {
-    user: 'postgres',
-    host: 'localhost',
-    database: 'sql_playground',
-    password: 'aaa',
-    port: 5432
-}
+const client = new Client({
+    user: process.env.DATABASE_USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    password: process.env.PASSWORD,
+    port: process.env.DATABASE_PORT
 
-
-const client= new Client(clientDatabaseConfig)
+})
 client.connect()
 
 console.log("Connected To The Database")
 
-module.exports={databaseObject : client}
+module.exports = {databaseObject: client}
