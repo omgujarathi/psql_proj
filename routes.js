@@ -2,19 +2,15 @@ const express = require('express')
 const app = express()
 const router = express.Router()
 const bodyParser = require('body-parser')
-const {  Client } = require('pg')
+const {Client} = require('pg')
 const jwt = require('jsonwebtoken')
 
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
+const urlencodedParser = bodyParser.urlencoded({extended: false})
 
 app.use(express.json())
 
 const client = new Client({
-    user : "postgres",
-    host : "localhost",
-    database :"sql_playground",
-    password:'aaa',
-    port:5432
+    user: "postgres", host: "localhost", database: "sql_playground", password: 'aaa', port: 5432
 })
 client.connect().then(() => {
     console.log("DB Connected.")
@@ -30,8 +26,8 @@ router.get('/login', (req, res) => {
     res.sendFile(__dirname + '/frontend/login.html')
 })
 
-router.post('/login',  urlencodedParser,(req, res) => {
-    console.log("body pram",req.body)
+router.post('/login', urlencodedParser, (req, res) => {
+    console.log("body pram", req.body)
     const query = {
         text: 'SELECT * FROM users WHERE username = $1 AND password = $2',
         values: [req.body.username, req.body.password]
@@ -44,14 +40,13 @@ router.post('/login',  urlencodedParser,(req, res) => {
         } else {
             let token
             try {
-                token = jwt.sign(
-                    { id: result.rows[0].firstname, username: result.rows[0].username },
-                    "secretkeyappearshere",
-                    { expiresIn: "1h" })
+                token = jwt.sign({
+                    id: result.rows[0].firstname,
+                    username: result.rows[0].username
+                }, "secretkeyappearshere", {expiresIn: "1h"})
                 res.sendFile(__dirname + '/frontend/user_dashboard.html')
                 console.log(token)
-            }
-            catch(err){
+            } catch (err) {
                 console.log(err)
             }
             console.log("Login successful.")

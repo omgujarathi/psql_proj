@@ -65,11 +65,9 @@ async function questionInfo(questionId) {
     return await databaseObject
         .query(query)
         .then(res => {
-            console.log(res);
             return {status: true, data: res.rows}
         })
         .catch(e => {
-            console.log(e)
             return {status: false, error: e}
         })
 
@@ -80,9 +78,8 @@ async function addUser(firstname, lastname, username, password, role) {
 
     const query = {
         text: "INSERT INTO users(firstname, lastname, username, password, score, role)  VALUES ($1, $2, $3, $4, $5, $6)",
-        values: [firstname, lastname, username, password, role]
+        values: [firstname, lastname, username, password, 0, role]
     }
-
 
 
     return await databaseObject
@@ -106,7 +103,7 @@ async function isUserExits(username) {
     return await databaseObject
         .query(query)
         .then(res => {
-            return {status: true, isExits: res.rowCount !== 0}
+            return {status: true, isExits: res.rowCount >= 1}
         })
         .catch(e => {
             return {status: false, error: e}
@@ -150,6 +147,23 @@ async function updateQuestionByUserId(userId, questionId, description, q_ans) {
 }
 
 
+async function getPasswordByUsername(username) {
+    const query = {
+        text: "select password from users where username=$1", values: [username]
+    }
+
+    try {
+        return await databaseObject
+            .query(query)
+            .then(res => {
+                return {status: true, userData: res.rows[0].password}
+            })
+    } catch (e) {
+        return {status: false, error: e}
+    }
+
+}
+
 module.exports = {
     getAllVerifiedQuestions: getAllVerifiedQuestions,
     getAllQuestionByUserId: getAllQuestionByUserId,
@@ -159,5 +173,6 @@ module.exports = {
     questionInfo: questionInfo,
     getUserByUserId: getUserByUserId,
     updateQuestionByUserId: updateQuestionByUserId,
+    getPasswordByUsername: getPasswordByUsername
 
 }
