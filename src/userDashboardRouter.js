@@ -3,6 +3,7 @@ let router = express.Router();
 const {
     getAllVerifiedQuestions, getAllQuestionByUserId, questionInfo, updateQuestionByUserId
 } = require("./databaseModel.js")
+const {verifyToken} = require("../middleware/auth.js")
 
 
 const questions = async (req, res) => {
@@ -86,11 +87,11 @@ const submitAnswer = async (req, res) => {
 
 }
 
-router.get("/verified-questions", questions)
-router.get("/my-questions", myQuestions)
-router.get("/question/:questionId", question)
-router.get("/edit-question/:questionId", editQuestion)
-router.put("/edit-question", updateQuestion)
-router.put("/submit-answe", submitAnswer)
+router.get("/verified-questions", verifyToken, questions)
+router.get("/my-questions", verifyToken, myQuestions)
+router.get("/question/:questionId", verifyToken, question)
+router.get("/edit-question/:questionId", verifyToken, editQuestion)
+router.put("/edit-question", verifyToken, updateQuestion)
+router.put("/submit-answe", verifyToken, submitAnswer)
 
 module.exports = {userDashboardRouter: router}

@@ -1,4 +1,5 @@
 const {databaseObject} = require("./databaseConnection.js")
+const {query} = require("express");
 
 
 async function getAllVerifiedQuestions() {
@@ -84,8 +85,8 @@ async function addUser(firstname, lastname, username, password, role) {
 
     return await databaseObject
         .query(query)
-        .then(res => {
-            return {status: true, rowsCount: res.count}
+        .then(async (res) => {
+            return {status: true, userData: {firstname, lastname, username}}
         })
         .catch(e => {
             return {status: false, error: e}
@@ -164,6 +165,39 @@ async function getPasswordByUsername(username) {
 
 }
 
+async function addToken(userid, token) {
+    const query = {
+        text: "update users set token = $1 where id=$2;", values: [token, userid]
+    }
+
+    try {
+        return await databaseObject
+            .query(query)
+            .then(res => {
+                return {status: true, userData: res.rows}
+            })
+    } catch (e) {
+        console.log(e)
+        return {status: false, error: e}
+    }
+}
+
+async function getUserIdByUsername(username) {
+    const query = {
+        text: "select id from users where username = $1", values: [username]
+    }
+
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return {status: true, userId: res.rows[0].id}
+        })
+        .catch(e => {
+            return {status: false, error: e}
+        })
+}
+
+
 module.exports = {
     getAllVerifiedQuestions: getAllVerifiedQuestions,
     getAllQuestionByUserId: getAllQuestionByUserId,
@@ -173,6 +207,8 @@ module.exports = {
     questionInfo: questionInfo,
     getUserByUserId: getUserByUserId,
     updateQuestionByUserId: updateQuestionByUserId,
-    getPasswordByUsername: getPasswordByUsername
+    getPasswordByUsername: getPasswordByUsername,
+    addToken: addToken,
+    getUserIdByUsername: getUserIdByUsername,
 
 }
