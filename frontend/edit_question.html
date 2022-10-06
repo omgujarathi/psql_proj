@@ -17,7 +17,7 @@
     
     <div>
     <div class="header text-primary">
-      <h1>Answer</h1>
+      <h1>Edit question</h1>
     </div>
     <form onsubmit="return false">
         <div class="form-group" >
@@ -52,7 +52,7 @@
               
             // Creating a XHR object
             let xhr = new XMLHttpRequest();
-            let url = "/api/user/dashboard/edit-question/";
+            let url = "/api/user/dashboard/questions/edit-question/";
        
             // open a connection
             xhr.open("PUT", url, true);
@@ -84,7 +84,7 @@
     async function myfuntion(){
       const i=window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
      // console.log(i[0]);
-      const images = await fetch(`/api/user/dashboard/question/${i}`)
+      const images = await fetch(`/api/user/dashboard/questions/${i}`)
       .then((res) => res.json())
       // .then((ques)=>console.log(ques));
       .then((ques)=>{

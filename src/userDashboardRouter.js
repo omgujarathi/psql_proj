@@ -17,6 +17,7 @@ const questions = async (req, res) => {
 
 const myQuestions = async (req, res) => {
     const userId = req.query.userId;
+    console.log(userId);
     if (userId) {
 
         const result = await getAllQuestionByUserId(userId)
@@ -105,12 +106,27 @@ const answer = async (req, res) => {
     
 }
 
-router.get("/verified-questions", questions)
-router.get("/my-questions", myQuestions)
-router.get("/question/:questionId", question)
-router.get("/edit-question/:questionId", editQuestion)
-router.put("/edit-question", updateQuestion)
-router.post("/submit-answer", submitAnswer)
-router.get("/answer/:qid", answer);
+// router.get("/verified-questions", questions)
+// router.get("/my-questions", myQuestions)
+// router.get("/question/:questionId", question)
+// router.get("/edit-question/:questionId", editQuestion)
+// router.put("/edit-question", updateQuestion)
+// router.post("/submit-answer", submitAnswer)
+// router.get("/answer/:qid", answer);
+
+// router.get("/verified-questions", questions)
+// router.get("/my-questions", myQuestions)
+// router.get("/question/:questionId", question)
+// router.get("/edit-question/:questionId", editQuestion)
+// router.put("/edit-question", updateQuestion)
+// router.post("/submitanswer", submitAnswer)
+// router.get("/answer/:qid", answer);
+router.get("/questions/verified", questions)
+router.get("/questions/my_questions", myQuestions)
+router.get("/questions/:questionId", question)
+router.get("/questions/:questionId?is_verified=1", editQuestion)
+router.put("/questions/edit-question", updateQuestion)
+router.post("/answers", submitAnswer)
+router.get("/answers/:qid", answer);
 
 module.exports = {userDashboardRouter: router}

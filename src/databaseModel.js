@@ -41,8 +41,8 @@ async function getAllQuestionByUserId(userId) {
 async function insertQuestion(userId, description, q_ans) {
 
     const query = {
-        text: "insert into questions(userid, description, q_ans, is_verified) values ($1, $2, $3, $4)",
-        values: [userId, description, q_ans, 0]
+        text: "insert into questions(userid, description, q_ans,database_link, is_verified) values ($1, $2, $3, $4,$5)",
+        values: [userId, description, q_ans,"google", 0]
     }
 
     return await databaseObject
