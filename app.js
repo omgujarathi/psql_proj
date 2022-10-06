@@ -11,6 +11,7 @@ const port = 8081;
 env.config()
 
 app.use(express.json())
+app.use(express.urlencoded({extended:false}))
 app.use(express.static(path.join(__dirname, "frontend")));
 
 
@@ -18,7 +19,6 @@ app.use("/api/user/dashboard", userDashboardRouter);
 app.use("/api/user/add-question",userAddQuestionRouter);
 app.use("/api/user/",loginRouter);
 app.use('', router)
-
 
 
 

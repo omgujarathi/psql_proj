@@ -5,6 +5,7 @@ const {
 } = require("./databaseModel.js")
 const {verifyToken} = require("../middleware/auth.js")
 
+const {checkSubmission}=require("./compairResult.js")
 
 const questions = async (req, res) => {
     const result = await getAllVerifiedQuestions();
@@ -87,11 +88,17 @@ const submitAnswer = async (req, res) => {
 
 }
 
+const submission = async(req,res)=>{
+    const{userQuery,authorQuery} = req.body
+    return res.send(await checkSubmission(userQuery,authorQuery))
+}
+
 router.get("/verified-questions", verifyToken, questions)
 router.get("/my-questions", verifyToken, myQuestions)
 router.get("/question/:questionId", verifyToken, question)
 router.get("/edit-question/:questionId", verifyToken, editQuestion)
 router.put("/edit-question", verifyToken, updateQuestion)
-router.put("/submit-answe", verifyToken, submitAnswer)
+router.post("/submit-answer", verifyToken, submitAnswer)
+router.post("/check-submission",verifyToken,submission)
 
 module.exports = {userDashboardRouter: router}
