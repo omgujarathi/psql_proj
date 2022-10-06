@@ -18,13 +18,57 @@
       <h1>Add Question</h1>
     </div>
 
-    <form>
+    <form onsubmit="return false">
       <div class="form-group">
         <label for="question">Enter Question</label>
         <textarea type="text" class="form-control" id="question" aria-describedby="emailHelp" placeholder="Enter Username"> </textarea>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-
+      <div class="form-group">
+        <label for="question">Enter answer</label>
+        <textarea type="text" class="form-control" id="answer" aria-describedby="emailHelp" placeholder="Enter answer"> </textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" onCLick="addQues()">Submit</button>
+      <div id="result" ></div>
     </form>
   </body>
+  <script>
+    async function addQues(){
+      const i=window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
+        // console.log(i[0]);    
+        // console.log(document.getElementById("question").value);
+            let answer = document.getElementById("answer").value;
+            let question = document.getElementById("question").value;
+              
+            // Creating a XHR object
+            let xhr = new XMLHttpRequest();
+            let url = "/api/user/add-question/question";
+       
+            // open a connection
+            xhr.open("POST", url, true);
+ 
+            // Set the request header i.e. which type of content you are sending
+            xhr.setRequestHeader("Content-Type", "application/json");
+ 
+            // Create a state change callback
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+ 
+                    // Print received data from server
+                    console.log(this.responseText);
+                    if(this.responseText[11]!="o"){
+                    result.innerHTML = this.responseText;}
+                    else{
+                        result.innerHTML="question added"
+                    }
+ 
+                }
+            }
+ 
+            // Converting JSON data to string
+            var data = JSON.stringify({"userId":4, "description": question, "q_ans":answer});
+            
+            // Sending data with the request
+            xhr.send(data);
+    }
+  </script>
 </html>

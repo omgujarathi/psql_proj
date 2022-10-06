@@ -96,5 +96,8 @@ router.get('/answer', (req, res) => {
 router.get('/my_questions', (req, res) => {
     res.sendFile(__dirname + '/frontend/my_questions.html')
 })
+router.get('/add_questions', (req, res) => {
+    res.sendFile(__dirname + '/frontend/add_questions.html')
+})
 
 module.exports = router

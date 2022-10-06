@@ -1,6 +1,6 @@
 const questionImage =  (store, ques) => {
    console.log("----------");
-    const images = fetch(`http://localhost:8081/api/user/dashboard/verified-questions`)
+    const images = fetch(`/api/user/dashboard/questions/verified`)
      .then((res) => res.json())
      .then((ques)=> {for(let i in ques){
         const a=`<li class="list-group-item"><a href="./answer.html?${ques[i].id}">${ques[i].description}</a></li><br>`

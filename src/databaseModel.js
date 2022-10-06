@@ -41,8 +41,8 @@ async function getAllQuestionByUserId(userId) {
 async function insertQuestion(userId, description, q_ans) {
 
     const query = {
-        text: "insert into questions(userid, description, q_ans, is_verified) values ($1, $2, $3, $4)",
-        values: [userId, description, q_ans, 0]
+        text: "insert into questions(userid, description, q_ans,database_link, is_verified) values ($1, $2, $3, $4,$5)",
+        values: [userId, description, q_ans,"google", 0]
     }
 
     return await databaseObject
@@ -146,7 +146,41 @@ async function updateQuestionByUserId(userId, questionId, description, q_ans) {
 
 
 }
+async function SubmitAnswerByUserId(userId, questionId, description) {
 
+    const query = {
+        text: "insert into answers(userid,q_id,description,correct) VALUES ($1,$2,$3,$4)",
+        values: [userId, questionId, description, 0,]
+    }
+    return await databaseObject
+    .query(query)
+    .then(res => {
+        return {status: true, rowsCount: res.rowCount}
+    })
+    .catch(e => {
+        return {status: false, error: e}
+    })
+
+
+}
+
+async function answerbyUserId(qId,uId) {
+    const query = {
+        text: "select * from answers where userid = $1 and q_id= $2 order by id desc", values: [uId,qId]
+    }
+
+    return await databaseObject
+        .query(query)
+        .then(res => {
+            return {status: true, data: res.rows}
+        })
+        .catch(e => {
+            return {status: false, error: e}
+        })
+
+
+       
+}
 
 async function getPasswordByUsername(username) {
     const query = {
@@ -207,6 +241,9 @@ module.exports = {
     questionInfo: questionInfo,
     getUserByUserId: getUserByUserId,
     updateQuestionByUserId: updateQuestionByUserId,
+    SubmitAnswerByUserId: SubmitAnswerByUserId,
+    answerbyUserId:answerbyUserId,
+
     getPasswordByUsername: getPasswordByUsername,
     addToken: addToken,
     getUserIdByUsername: getUserIdByUsername,
